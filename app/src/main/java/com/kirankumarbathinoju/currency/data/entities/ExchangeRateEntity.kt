@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * entity for exchange rate
  */
 @Entity(tableName = "exchange_rate")
-data class ExchangeRate(
+data class ExchangeRateEntity(
 
     @PrimaryKey val symbol: String,
 

@@ -3,8 +3,8 @@ package com.kirankumarbathinoju.currency.usecases
 import android.util.Log
 import com.kirankumarbathinoju.currency.BuildConfig
 import com.kirankumarbathinoju.currency.data.CurrencyValue
-import com.kirankumarbathinoju.currency.data.entities.Currency
-import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
+import com.kirankumarbathinoju.currency.data.entities.ExchangeRateEntity
 import com.kirankumarbathinoju.currency.data.exceptions.GenericException
 import com.kirankumarbathinoju.currency.data.exceptions.NetworkException
 import com.kirankumarbathinoju.currency.data.repositories.HttpCurrencyRepository
@@ -28,7 +28,7 @@ class CurrencyUseCases @Inject constructor(
      * load all currencies from API and then store them inside local database for future uses
      */
     @Throws(NetworkException::class, GenericException::class)
-    fun getAllCurrencies(): List<Currency> {
+    fun getAllCurrencies(): List<CurrencyEntity> {
         try {
             //loading for local repository
             var currencies = localRepository.getCurrencies()
@@ -40,7 +40,7 @@ class CurrencyUseCases @Inject constructor(
 
                 //mapping DTO received to a list of Currency entity class
                 currencies = currenciesMap.map { entry ->
-                    Currency(
+                    CurrencyEntity(
                         entry.key,
                         entry.value,
                     )
@@ -67,7 +67,7 @@ class CurrencyUseCases @Inject constructor(
      */
     @Throws(NetworkException::class, GenericException::class)
     fun getRatesByCurrencyAndAmount(
-        selectedCurrency: Currency, amount: Double
+        selectedCurrency: CurrencyEntity, amount: Double
     ): List<CurrencyValue> {
 
         try {
@@ -103,7 +103,7 @@ class CurrencyUseCases @Inject constructor(
     /**
      * loading exchange rates, refreshed each 30 mins
      */
-    private fun getExchangeRates(): List<ExchangeRate> {
+    private fun getExchangeRates(): List<ExchangeRateEntity> {
 
 
         var ratesList = localRepository.getRatesWithTimeGreaterThan(validTime)
@@ -126,7 +126,7 @@ class CurrencyUseCases @Inject constructor(
 
             //mapping DTO received to a list of Currency entity class
             ratesList = rates.rates.map { entry ->
-                ExchangeRate(
+                ExchangeRateEntity(
                     entry.key, entry.value, timestamp, base
                 )
             }

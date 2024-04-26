@@ -8,11 +8,11 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 /**
- * api interface for openexchangerates
+ * api interface for openExchangeRates
  * the API_KEY is declared in app build.gradle in order to handle different environment
  * (development key with app debug profile and production key with app release debug)
  */
-interface ApiInterface {
+interface ApiServiceInterface {
 
     @GET("currencies.json")
     fun getCurrencies(): Call<Map<String, String>>
@@ -24,14 +24,14 @@ interface ApiInterface {
     companion object {
         private const val BASE_URL = "https://openexchangerates.org/api/"
 
-        fun create(): ApiInterface {
+        fun create(): ApiServiceInterface {
 
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .build()
 
-            return retrofit.create(ApiInterface::class.java)
+            return retrofit.create(ApiServiceInterface::class.java)
         }
     }
 }

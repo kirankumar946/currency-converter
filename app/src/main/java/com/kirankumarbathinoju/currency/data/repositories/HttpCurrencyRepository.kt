@@ -4,7 +4,7 @@ import android.util.Log
 import com.kirankumarbathinoju.currency.data.dto.ExchangeRateDTO
 import com.kirankumarbathinoju.currency.data.exceptions.GenericException
 import com.kirankumarbathinoju.currency.data.exceptions.NetworkException
-import com.kirankumarbathinoju.currency.data.repositories.api.ApiInterface
+import com.kirankumarbathinoju.currency.data.repositories.api.ApiServiceInterface
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class HttpCurrencyRepository @Inject constructor() {
 
         Log.d(tag, "fetching currencies from api...")
 
-        val apiInterface = ApiInterface.create()
+        val apiInterface = ApiServiceInterface.create()
         val request =
             apiInterface.getCurrencies()
 
@@ -53,7 +53,7 @@ class HttpCurrencyRepository @Inject constructor() {
 
         Log.d(tag, "fetching currencies from api...")
 
-        val apiInterface = ApiInterface.create()
+        val apiInterface = ApiServiceInterface.create()
         val request =
             apiInterface.getLatestExchangeRate(apiKey)
 

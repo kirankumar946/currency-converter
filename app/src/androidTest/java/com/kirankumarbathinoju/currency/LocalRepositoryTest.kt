@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.kirankumarbathinoju.currency.data.database.AppDatabase
-import com.kirankumarbathinoju.currency.data.entities.Currency
-import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
+import com.kirankumarbathinoju.currency.data.database.CurrencyConverterDatabase
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
+import com.kirankumarbathinoju.currency.data.entities.ExchangeRateEntity
 import com.kirankumarbathinoju.currency.data.repositories.LocalCurrencyRepository
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -29,7 +29,7 @@ class LocalRepositoryTest {
     fun setupRepository() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
+            context, CurrencyConverterDatabase::class.java
         ).build()
         val currencyDao = db.currencyDao()
         val exchangeRateDao = db.exchangeRateDao()
@@ -41,8 +41,8 @@ class LocalRepositoryTest {
     @Test
     fun savingAndRetrieveCurrencies() {
 
-        val usd = Currency("USD", "Dollaro")
-        val eur = Currency("EUR", "Euro")
+        val usd = CurrencyEntity("USD", "Dollaro")
+        val eur = CurrencyEntity("EUR", "Euro")
         val currencies = arrayListOf(usd, eur)
 
         assertEquals(currencies.size, 2)
@@ -60,9 +60,9 @@ class LocalRepositoryTest {
     @Test
     fun savingAndRetrieveExchangeRates() {
 
-        val rateUsd = ExchangeRate("USD", 1.0, System.currentTimeMillis(), "USD")
-        val rateEur = ExchangeRate("EUR", 1.05, System.currentTimeMillis(), "USD")
-        val rateJpy = ExchangeRate("JPY", 144.0, System.currentTimeMillis(), "USD")
+        val rateUsd = ExchangeRateEntity("USD", 1.0, System.currentTimeMillis(), "USD")
+        val rateEur = ExchangeRateEntity("EUR", 1.05, System.currentTimeMillis(), "USD")
+        val rateJpy = ExchangeRateEntity("JPY", 144.0, System.currentTimeMillis(), "USD")
         val rates = arrayListOf(rateUsd, rateEur, rateJpy)
 
         assertEquals(rates.size, 3)

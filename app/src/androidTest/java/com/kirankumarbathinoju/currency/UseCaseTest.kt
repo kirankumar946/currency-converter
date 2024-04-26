@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.kirankumarbathinoju.currency.data.database.AppDatabase
-import com.kirankumarbathinoju.currency.data.entities.Currency
+import com.kirankumarbathinoju.currency.data.database.CurrencyConverterDatabase
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
 import com.kirankumarbathinoju.currency.data.exceptions.GenericException
 import com.kirankumarbathinoju.currency.data.repositories.HttpCurrencyRepository
 import com.kirankumarbathinoju.currency.data.repositories.LocalCurrencyRepository
@@ -29,7 +29,7 @@ class UseCaseTest {
     fun initUseCase() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
+            context, CurrencyConverterDatabase::class.java
         ).build()
         val currencyDao = db.currencyDao()
         val exchangeRateDao = db.exchangeRateDao()
@@ -49,7 +49,7 @@ class UseCaseTest {
 
     @Test(expected = GenericException::class)
     fun getRateError() {
-        val invalidCurrency = Currency("NOT_VALID", "invalid currency")
+        val invalidCurrency = CurrencyEntity("NOT_VALID", "invalid currency")
         useCase.getRatesByCurrencyAndAmount(invalidCurrency, 4.0)
     }
 

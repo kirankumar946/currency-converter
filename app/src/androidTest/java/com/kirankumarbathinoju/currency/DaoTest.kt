@@ -6,9 +6,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kirankumarbathinoju.currency.data.dao.CurrencyDao
 import com.kirankumarbathinoju.currency.data.dao.ExchangeRateDao
-import com.kirankumarbathinoju.currency.data.database.AppDatabase
-import com.kirankumarbathinoju.currency.data.entities.Currency
-import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
+import com.kirankumarbathinoju.currency.data.database.CurrencyConverterDatabase
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
+import com.kirankumarbathinoju.currency.data.entities.ExchangeRateEntity
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -26,13 +26,13 @@ class DaoTest {
 
     private lateinit var currencyDao: CurrencyDao
     private lateinit var exchangeRateDao: ExchangeRateDao
-    private lateinit var db: AppDatabase
+    private lateinit var db: CurrencyConverterDatabase
 
     @Before
     fun setupDbAndDao() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
+            context, CurrencyConverterDatabase::class.java
         ).build()
         currencyDao = db.currencyDao()
         exchangeRateDao = db.exchangeRateDao()
@@ -48,8 +48,8 @@ class DaoTest {
     fun currencyDaoOperations() {
 
         //populating a list of currencies
-        val usd = Currency("USD", "Dollaro")
-        val eur = Currency("EUR", "Euro")
+        val usd = CurrencyEntity("USD", "Dollaro")
+        val eur = CurrencyEntity("EUR", "Euro")
         val currencies = arrayListOf(usd, eur)
 
         // reading all currencies before insert, expecting an empty array
@@ -65,7 +65,7 @@ class DaoTest {
         assertEquals(currencies.size, persistedCurrencies.size)
 
         //saving another currency, this will overwrite the existing value in db, size shouln't increase
-        currencyDao.insert(Currency("EUR", "Euro"))
+        currencyDao.insert(CurrencyEntity("EUR", "Euro"))
         persistedCurrencies = currencyDao.getAll()
         assertTrue(persistedCurrencies.isNotEmpty())
         assertEquals(currencies.size, persistedCurrencies.size)
@@ -88,9 +88,9 @@ class DaoTest {
     fun exchangeRateDaoOperations() {
 
         //populating a list of currencies
-        val rateUsd = ExchangeRate("USD", 1.0, System.currentTimeMillis(), "USD")
-        val rateEur = ExchangeRate("EUR", 1.05, System.currentTimeMillis(), "USD")
-        val rateJpy = ExchangeRate("JPY", 144.0, System.currentTimeMillis(), "USD")
+        val rateUsd = ExchangeRateEntity("USD", 1.0, System.currentTimeMillis(), "USD")
+        val rateEur = ExchangeRateEntity("EUR", 1.05, System.currentTimeMillis(), "USD")
+        val rateJpy = ExchangeRateEntity("JPY", 144.0, System.currentTimeMillis(), "USD")
         val currencies = arrayListOf(rateUsd, rateEur, rateJpy)
 
         // reading all currencies before insert, expecting an empty array
@@ -106,7 +106,7 @@ class DaoTest {
         assertEquals(currencies.size, persistedExchangeRates.size)
 
         //saving another currency, this will overwrite the existing value in db, size shouln't increase
-        exchangeRateDao.insert(ExchangeRate("USD", 1.0, System.currentTimeMillis(), "USD"))
+        exchangeRateDao.insert(ExchangeRateEntity("USD", 1.0, System.currentTimeMillis(), "USD"))
         persistedExchangeRates = exchangeRateDao.getAll()
         assertTrue(persistedExchangeRates.isNotEmpty())
         assertEquals(currencies.size, persistedExchangeRates.size)

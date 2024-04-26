@@ -1,7 +1,7 @@
 package com.kirankumarbathinoju.currency.data.repositories
 
-import com.kirankumarbathinoju.currency.data.entities.Currency
-import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
+import com.kirankumarbathinoju.currency.data.entities.ExchangeRateEntity
 import com.kirankumarbathinoju.currency.data.dao.CurrencyDao
 import com.kirankumarbathinoju.currency.data.dao.ExchangeRateDao
 import javax.inject.Inject
@@ -17,19 +17,19 @@ class LocalCurrencyRepository @Inject constructor(
 ) {
 
 
-    fun getCurrencies(): List<Currency> {
+    fun getCurrencies(): List<CurrencyEntity> {
         return currencyDao.getAll()
     }
 
-    fun getRatesWithTimeGreaterThan(minTime: Long): List<ExchangeRate> {
+    fun getRatesWithTimeGreaterThan(minTime: Long): List<ExchangeRateEntity> {
         return exchangeRateDao.getAllGreaterThanTimestamp(minTime)
     }
 
-    fun saveCurrencies(currencies: List<Currency>) {
+    fun saveCurrencies(currencies: List<CurrencyEntity>) {
         currencyDao.insertAll(currencies)
     }
 
-    fun saveExchangeRates(exchangeRateList: List<ExchangeRate>) {
+    fun saveExchangeRates(exchangeRateList: List<ExchangeRateEntity>) {
         exchangeRateDao.insertAll(exchangeRateList)
     }
 

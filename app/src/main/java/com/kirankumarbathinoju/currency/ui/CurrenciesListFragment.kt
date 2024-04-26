@@ -2,6 +2,8 @@ package com.kirankumarbathinoju.currency.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,26 +15,27 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kirankumarbathinoju.currency.R
 import com.kirankumarbathinoju.currency.data.CurrencyValue
-import com.kirankumarbathinoju.currency.data.entities.Currency
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
 import com.kirankumarbathinoju.currency.databinding.FragmentCurrenciesBinding
-import com.kirankumarbathinoju.currency.ui.adapters.CurrenciesAdapter
-import com.kirankumarbathinoju.currency.ui.adapters.decoration.GridSpacerDecoration
+import com.kirankumarbathinoju.currency.ui.adapters.CurrenciesListAdapter
+import com.kirankumarbathinoju.currency.ui.adapters.decoration.GridDecoration
 import com.kirankumarbathinoju.currency.ui.dialogs.Dialogs
-import com.kirankumarbathinoju.currency.ui.viewmodels.CurrenciesViewModel
+import com.kirankumarbathinoju.currency.ui.viewmodels.CurrenciesListViewModel
 import com.kirankumarbathinoju.currency.ui.viewmodels.Status
 import dagger.hilt.android.AndroidEntryPoint
+
 
 /**
  * fragment responsible to show list of currencies
  */
 @AndroidEntryPoint
-class CurrenciesFragment : Fragment() {
+class CurrenciesListFragment : Fragment() {
 
     //view model
-    private val viewModel: CurrenciesViewModel by viewModels()
+    private val viewModel: CurrenciesListViewModel by viewModels()
 
     //adapter to show currency values
-    private val adapter: CurrenciesAdapter = CurrenciesAdapter()
+    private val adapter: CurrenciesListAdapter = CurrenciesListAdapter()
 
     //view binding
     private lateinit var binding: FragmentCurrenciesBinding
@@ -49,7 +52,7 @@ class CurrenciesFragment : Fragment() {
 
             when (state.status) {
                 Status.SUCCESS -> {
-                    setupDropdown(state.data as List<Currency>)
+                    setupDropdown(state.data as List<CurrencyEntity>)
                 }
                 Status.LOADING -> {
                     showLoadingCurrencies()
@@ -77,7 +80,7 @@ class CurrenciesFragment : Fragment() {
 
 
         (binding.currenciesDropdown.editText as? AutoCompleteTextView)?.setOnItemClickListener { dropdown, _, position, _ ->
-            val selectedCurrency = dropdown.adapter.getItem(position) as Currency
+            val selectedCurrency = dropdown.adapter.getItem(position) as CurrencyEntity
             viewModel.changeSelectedCurrency(selectedCurrency)
             binding.recyclerview.smoothScrollToPosition(0)
         }
@@ -90,7 +93,13 @@ class CurrenciesFragment : Fragment() {
             viewModel.loadCurrencies()
         }
 
-
+        binding.countryCodeSearch.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                filter(editable.toString())
+            }
+        })
         binding.currencyInput.editText?.setText(viewModel.amountToConvert?.toString())
         binding.currenciesDropdown.editText?.setText(viewModel.selectedCurrency?.toString())
 
@@ -99,7 +108,7 @@ class CurrenciesFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupDropdown(data: List<Currency>) {
+    private fun setupDropdown(data: List<CurrencyEntity>) {
         binding.currenciesDropdown.visibility = View.VISIBLE
         binding.progressCurrencies.visibility = View.GONE
         val adapter = ArrayAdapter(
@@ -121,7 +130,7 @@ class CurrenciesFragment : Fragment() {
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.layoutManager = GridLayoutManager(activity, columns)
         binding.recyclerview.addItemDecoration(
-            GridSpacerDecoration(
+            GridDecoration(
                 columns,
                 resources.getDimensionPixelSize(R.dimen.adapter_item_space),
                 false
@@ -167,16 +176,28 @@ class CurrenciesFragment : Fragment() {
         binding.recyclerview.visibility = View.GONE
         binding.circularProgress.visibility = View.GONE
     }
+    fun filter(text: String) {
+        val filteredNames = ArrayList<CurrencyValue>()
+        val list = viewModel.currencyValues.value?.data
+        for(item in list!!){
+            if (item.symbol.lowercase().contains(text.lowercase())) {
+                filteredNames.add(item)
+            }
+        }
+        adapter.setData(filteredNames)
+    }
 
     private fun showData(currenciesValue: List<CurrencyValue>?) {
         binding.circularProgress.visibility = View.GONE
         if (currenciesValue != null) {
             binding.emptyListLabel.visibility = View.GONE
             binding.recyclerview.visibility = View.VISIBLE
+            binding.countryCodeSearch.visibility = View.VISIBLE
             adapter.setData(currenciesValue)
         } else {
             binding.emptyListLabel.visibility = View.VISIBLE
             binding.recyclerview.visibility = View.GONE
+            binding.countryCodeSearch.visibility = View.GONE
         }
     }
 

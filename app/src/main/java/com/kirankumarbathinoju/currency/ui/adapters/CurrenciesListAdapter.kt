@@ -8,11 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kirankumarbathinoju.currency.R
 import com.kirankumarbathinoju.currency.data.CurrencyValue
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
+
 
 /**
  * this adapter handle the currencies items for the recycler view
  */
-class CurrenciesAdapter : RecyclerView.Adapter<CurrenciesAdapter.ViewHolder>() {
+class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.ViewHolder>() {
 
     private var currencies: List<CurrencyValue>? = null
 

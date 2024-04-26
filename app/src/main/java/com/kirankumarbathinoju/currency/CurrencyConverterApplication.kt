@@ -7,4 +7,4 @@ import dagger.hilt.android.HiltAndroidApp
  * extending android application class in order to use Hilt dependency injection
  */
 @HiltAndroidApp
-class CurrencyApplication : Application()
+class CurrencyConverterApplication : Application()

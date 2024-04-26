@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * entity for currency
  */
 @Entity(tableName = "currency")
-data class Currency(
+data class CurrencyEntity(
 
     @PrimaryKey val symbol: String,
 

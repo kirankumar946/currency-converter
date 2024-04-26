@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
  * @param spacingSize space between items, in pixel
  * @param includeEdge include the edges for decoration
  */
-class GridSpacerDecoration(
+class GridDecoration(
     private val columnsNumber: Int,
     private val spacingSize: Int,
     private val includeEdge: Boolean

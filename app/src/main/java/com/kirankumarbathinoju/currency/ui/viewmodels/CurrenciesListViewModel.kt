@@ -2,35 +2,37 @@ package com.kirankumarbathinoju.currency.ui.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kirankumarbathinoju.currency.data.CurrencyValue
-import com.kirankumarbathinoju.currency.data.entities.Currency
+import com.kirankumarbathinoju.currency.data.entities.CurrencyEntity
 import com.kirankumarbathinoju.currency.usecases.CurrencyUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 import javax.inject.Inject
 
 /**
- * view model class used by [com.kirankumarbathinoju.currency.ui.CurrenciesFragment]
+ * view model class used by [com.kirankumarbathinoju.currency.ui.CurrenciesListFragment]
  */
 @HiltViewModel
-class CurrenciesViewModel @Inject internal constructor(private val useCase: CurrencyUseCases) :
+class CurrenciesListViewModel @Inject internal constructor(private val useCase: CurrencyUseCases) :
     ViewModel() {
 
     //immutable to observe in the view
-    val currencies: LiveData<State<List<Currency>>> get() = _currencies
-    private val _currencies = MutableLiveData<State<List<Currency>>>()
+    val currencies: LiveData<State<List<CurrencyEntity>>> get() = _currencies
+    private val _currencies = MutableLiveData<State<List<CurrencyEntity>>>()
 
     //immutable to observe in the view
     val currencyValues: LiveData<State<List<CurrencyValue>>> get() = _currencyValues
     private val _currencyValues = MutableLiveData<State<List<CurrencyValue>>>()
 
     //the current select currency
-    val selectedCurrency: Currency? get() = _selectedCurrency
-    private var _selectedCurrency: Currency? = null
+    val selectedCurrency: CurrencyEntity? get() = _selectedCurrency
+    private var _selectedCurrency: CurrencyEntity? = null
 
     //the amount to convert in different currencies
     val amountToConvert: Double? get() = _amountToConvert
@@ -61,7 +63,7 @@ class CurrenciesViewModel @Inject internal constructor(private val useCase: Curr
     }
 
     //this will be invoked when currency is selected from dropdown
-    fun changeSelectedCurrency(selectedCurrency: Currency) {
+    fun changeSelectedCurrency(selectedCurrency: CurrencyEntity) {
         _selectedCurrency = selectedCurrency
         loadExchangeRates()
     }
@@ -99,5 +101,4 @@ class CurrenciesViewModel @Inject internal constructor(private val useCase: Curr
             }
         }
     }
-
 }

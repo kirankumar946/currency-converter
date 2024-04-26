@@ -1,7 +1,7 @@
 package com.kirankumarbathinoju.currency.di
 
 import android.content.Context
-import com.kirankumarbathinoju.currency.data.database.AppDatabase
+import com.kirankumarbathinoju.currency.data.database.CurrencyConverterDatabase
 import com.kirankumarbathinoju.currency.data.dao.CurrencyDao
 import com.kirankumarbathinoju.currency.data.dao.ExchangeRateDao
 import dagger.Module
@@ -20,19 +20,19 @@ class DBModuleInjection {
 
     @Singleton
     @Provides
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return AppDatabase.getInstance(context)
+    fun provideAppDatabase(@ApplicationContext context: Context): CurrencyConverterDatabase {
+        return CurrencyConverterDatabase.getInstance(context)
     }
 
 
     @Provides
-    fun provideCurrencyDao(appDatabase: AppDatabase): CurrencyDao {
+    fun provideCurrencyDao(appDatabase: CurrencyConverterDatabase): CurrencyDao {
         return appDatabase.currencyDao()
     }
 
 
     @Provides
-    fun provideExchangeRateDao(appDatabase: AppDatabase): ExchangeRateDao {
+    fun provideExchangeRateDao(appDatabase: CurrencyConverterDatabase): ExchangeRateDao {
         return appDatabase.exchangeRateDao()
     }
 }

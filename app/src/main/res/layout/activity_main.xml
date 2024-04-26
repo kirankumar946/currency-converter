@@ -20,12 +20,11 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/currency_fragment"
-        android:name="com.kirankumarbathinoju.currency.ui.CurrenciesFragment"
+        android:name="com.kirankumarbathinoju.currency.ui.CurrenciesListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:layout="@layout/fragment_currencies" />
 
     <!--    <include layout="@layout/fragment_currencies" />-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

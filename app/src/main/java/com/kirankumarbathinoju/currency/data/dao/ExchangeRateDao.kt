@@ -1,7 +1,7 @@
 package com.kirankumarbathinoju.currency.data.dao
 
 import androidx.room.*
-import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
+import com.kirankumarbathinoju.currency.data.entities.ExchangeRateEntity
 
 /**
  * data access object for exchange rate currency
@@ -10,21 +10,21 @@ import com.kirankumarbathinoju.currency.data.entities.ExchangeRate
 interface ExchangeRateDao {
 
     @Query("SELECT * FROM exchange_rate order by symbol asc")
-    fun getAll(): List<ExchangeRate>
+    fun getAll(): List<ExchangeRateEntity>
 
     @Query("SELECT * FROM exchange_rate where timestamp > :minTime order by symbol asc")
-    fun getAllGreaterThanTimestamp(minTime: Long): List<ExchangeRate>
+    fun getAllGreaterThanTimestamp(minTime: Long): List<ExchangeRateEntity>
 
     @Query("SELECT * FROM exchange_rate WHERE symbol = :value LIMIT 1")
-    fun findBySymbol(value: String): ExchangeRate
+    fun findBySymbol(value: String): ExchangeRateEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(exchangeRate: ExchangeRate)
+    fun insert(exchangeRate: ExchangeRateEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(currencies: Collection<ExchangeRate>)
+    fun insertAll(currencies: Collection<ExchangeRateEntity>)
 
     @Delete
-    fun delete(exchangeRate: ExchangeRate)
+    fun delete(exchangeRate: ExchangeRateEntity)
 
 }
