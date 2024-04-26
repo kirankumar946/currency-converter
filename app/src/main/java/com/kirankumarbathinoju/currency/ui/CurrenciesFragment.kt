@@ -86,6 +86,10 @@ class CurrenciesFragment : Fragment() {
             viewModel.changeAmount(text.toString().toDoubleOrNull())
         }
 
+        binding.refresh.setOnClickListener{
+            viewModel.loadCurrencies()
+        }
+
 
         binding.currencyInput.editText?.setText(viewModel.amountToConvert?.toString())
         binding.currenciesDropdown.editText?.setText(viewModel.selectedCurrency?.toString())
